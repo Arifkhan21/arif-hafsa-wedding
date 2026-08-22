@@ -1,0 +1,6 @@
+# personal reference media — never publish
+*.heic
+*.HEIC
+*.mp4
+*.mov
+.DS_Store
