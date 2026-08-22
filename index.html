@@ -125,8 +125,13 @@ p.lede{
 }
 .cov-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;gap:0}
 .cov-bism{font-size:19px;color:var(--mehndi-deep);opacity:.9;margin-bottom:30px;font-family:serif;direction:rtl}
-.cov-names{font-family:'Marcellus',serif;font-size:clamp(30px,9vw,42px);line-height:1.18;color:var(--ink);margin:0}
-.cov-amp{font-family:'Italianno',cursive;font-size:46px;color:var(--gulab);line-height:.7;display:block;margin:6px 0}
+.cov-names{display:flex;flex-direction:column;align-items:center;margin:0;color:var(--ink)}
+.cov-amp{font-family:'Italianno',cursive;font-size:58px;color:var(--gulab);line-height:.75;margin-bottom:2px}
+.cov-pair{
+  display:flex;align-items:baseline;justify-content:center;
+  gap:clamp(24px,6.8vw,38px);
+  font-family:'Marcellus',serif;font-size:clamp(28px,8.4vw,40px);line-height:1.15;
+}
 .cov-date{margin-top:24px;color:var(--gold);}
 /* wax seal */
 .seal{
@@ -234,14 +239,18 @@ p.lede{
 .arch-wrap.in .spray.l{opacity:1;transform:translateX(0) rotate(-6deg)}
 .arch-wrap.in .spray.r{opacity:1;transform:translateX(0) scaleX(-1) rotate(6deg)}
 
-.names{margin:40px 0 0}
-.names .n{
-  display:block;font-family:'Marcellus',serif;
-  font-size:clamp(32px,9.5vw,44px);line-height:1.1;color:var(--ink);
-}
+.names{margin:40px 0 0;display:flex;flex-direction:column;align-items:center}
 .names .amp{
-  display:block;font-family:'Italianno',cursive;
-  font-size:52px;line-height:.8;color:var(--gulab);margin:2px 0;
+  font-family:'Italianno',cursive;
+  font-size:62px;line-height:.75;color:var(--gulab);margin-bottom:2px;
+}
+.names .pair{
+  display:flex;align-items:baseline;justify-content:center;
+  gap:clamp(26px,7.2vw,42px);
+}
+.names .n{
+  font-family:'Marcellus',serif;
+  font-size:clamp(30px,8.8vw,42px);line-height:1.12;color:var(--ink);
 }
 .hero-date{
   margin-top:30px;display:flex;align-items:center;justify-content:center;gap:14px;
@@ -315,10 +324,9 @@ p.lede{
   background:var(--paper);
   border:1px solid var(--rule);
   border-radius:190px 190px 12px 12px / 84px 84px 12px 12px;
-  padding:76px 22px 24px;cursor:pointer;
+  padding:76px 22px 30px;
   transition:box-shadow .5s var(--ease),transform .5s var(--ease);
 }
-.ev:hover{box-shadow:0 20px 44px -26px rgba(38,48,31,.42);transform:translateY(-3px)}
 .ev::before{ /* inner keyline echoing the arch */
   content:"";position:absolute;inset:7px;pointer-events:none;
   border:1px solid color-mix(in srgb,var(--hue) 26%,transparent);
@@ -340,24 +348,6 @@ p.lede{
 .ev-name{font-family:'Marcellus',serif;font-weight:400;font-size:27px;color:var(--ink);margin:0 0 4px;display:block}
 .ev-when{color:var(--hue-deep);margin-bottom:2px;display:block}
 .ev-dow{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:var(--ink-faint);display:block}
-.ev-toggle{
-  margin-top:16px;display:inline-flex;align-items:center;gap:8px;
-  font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;
-  color:var(--hue-deep);padding:8px 4px;
-}
-.ev-toggle svg{width:9px;height:9px;transition:transform .45s var(--ease)}
-.ev.open .ev-toggle svg{transform:rotate(180deg)}
-.ev-body{
-  display:grid;grid-template-rows:0fr;
-  transition:grid-template-rows .55s var(--ease),opacity .45s var(--ease);
-  opacity:0;
-}
-.ev.open .ev-body{grid-template-rows:1fr;opacity:1}
-.ev-body > div{overflow:hidden;min-height:0}
-.ev-body p{
-  font-family:'Cormorant Garamond',serif;font-size:17px;line-height:1.8;
-  color:var(--ink-soft);margin:14px auto 0;max-width:31ch;
-}
 .ev-tbd{
   display:inline-block;margin-top:14px;
   font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-faint);
@@ -527,7 +517,7 @@ p.lede{
     <div class="leaf r"></div>
     <div class="cov-content">
       <p class="cov-bism">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-      <p class="cov-names">Arif<span class="cov-amp">&amp;</span>Hafsa</p>
+      <div class="cov-names"><span class="cov-amp">&amp;</span><span class="cov-pair"><span>Arif</span><span>Hafsa</span></span></div>
       <p class="cov-date util">Saturday · 10 October 2026</p>
       <button class="seal" id="seal" aria-label="Open the invitation"><span>A&amp;H</span></button>
       <p class="cov-hint util">Tap the seal to open</p>
@@ -603,9 +593,8 @@ p.lede{
 
     <p class="util eyebrow rv rv-d2" style="margin:44px 0 14px">We are getting married</p>
     <h1 class="names rv rv-d3">
-      <span class="n">Arif</span>
       <span class="amp">&amp;</span>
-      <span class="n">Hafsa</span>
+      <span class="pair"><span class="n">Arif</span><span class="n">Hafsa</span></span>
     </h1>
     <div class="hero-date util rv rv-d4"><i></i>10 · 10 · 2026<i></i></div>
     <p class="hero-day rv rv-d4">Saturday</p>
@@ -656,8 +645,8 @@ p.lede{
       <div class="fam-amp">&amp;</div>
       <div class="fam-side">
         <p class="fn">Hafsa Mariyam</p>
-        <p><span>Daughter of</span><b>Syed Asif Iftikhar</b> <b><i>&amp;</i> Naaz Asif</b></p>
-        <p style="margin-top:8px"><span>Granddaughter of</span>Syed Iftikhar</p>
+        <p><span>Daughter of</span><b>Syed Asif Iftikhar</b> <b><i>&amp;</i>Naaz Asif</b></p>
+        <p style="margin-top:8px"><span>Granddaughter of</span>Late Syed Iftikhar</p>
       </div>
     </div>
   </section>
@@ -666,7 +655,7 @@ p.lede{
   <section id="events">
     <span class="util eyebrow rv">Four days of celebration</span>
     <h2 class="title rv rv-d1">The Wedding Week</h2>
-    <p class="lede rv rv-d1">Each day carries its own colour. Tap a card for more.</p>
+    <p class="lede rv rv-d1">Each day carries its own colour.</p>
 
     <div class="ev-list">
       <div class="ev ev-haldi rv rv-d1">
@@ -675,10 +664,6 @@ p.lede{
         <h3 class="ev-name">Haldi</h3>
         <span class="ev-when util">7 October 2026</span>
         <span class="ev-dow">Wednesday</span>
-        <button class="ev-toggle" aria-expanded="false" aria-controls="ev1">Details <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1,1.5 L6,6.5 L11,1.5"/></svg></button>
-        <div class="ev-body" id="ev1"><div>
-          <p>The morning of turmeric. Marigolds, drums, and the first blessings of the week — smeared on in fistfuls by everyone who loves us.</p><span class="ev-tbd">Venue &amp; timings to follow</span>
-        </div></div>
       </div>
 
       <div class="ev ev-mehndi rv rv-d1">
@@ -687,10 +672,6 @@ p.lede{
         <h3 class="ev-name">Mehndi</h3>
         <span class="ev-when util">8 October 2026</span>
         <span class="ev-dow">Thursday</span>
-        <button class="ev-toggle" aria-expanded="false" aria-controls="ev2">Details <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1,1.5 L6,6.5 L11,1.5"/></svg></button>
-        <div class="ev-body" id="ev2"><div>
-          <p>Henna, laughter and songs that run long past midnight, while the bride&rsquo;s hands slowly take their colour.</p><span class="ev-tbd">Venue &amp; timings to follow</span>
-        </div></div>
       </div>
 
       <div class="ev ev-nikah rv rv-d1">
@@ -699,22 +680,14 @@ p.lede{
         <h3 class="ev-name">Nikah</h3>
         <span class="ev-when util">9 October 2026</span>
         <span class="ev-dow">Friday</span>
-        <button class="ev-toggle" aria-expanded="false" aria-controls="ev3">Details <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1,1.5 L6,6.5 L11,1.5"/></svg></button>
-        <div class="ev-body" id="ev3"><div>
-          <p>The solemnisation. Our vows spoken before family and faith — the quiet centre of the whole week.</p><span class="ev-tbd">Venue &amp; timings to follow</span>
-        </div></div>
       </div>
 
-      <div class="ev ev-recep rv rv-d1 open">
+      <div class="ev ev-recep rv rv-d1">
         <svg class="ev-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g><ellipse cx="24" cy="14" rx="6" ry="8.5"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(72 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(144 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(216 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(288 24 24)"/></g><circle cx="24" cy="24" r="3.4"/></svg>
         <span class="ev-num"></span>
         <h3 class="ev-name">Reception</h3>
         <span class="ev-when util">10 October 2026</span>
         <span class="ev-dow">Saturday</span>
-        <button class="ev-toggle" aria-expanded="true" aria-controls="ev4">Details <svg viewBox="0 0 12 8" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1,1.5 L6,6.5 L11,1.5"/></svg></button>
-        <div class="ev-body" id="ev4"><div>
-          <p>Dinner, music and dancing — our first evening as husband and wife, at <strong>Bundelkhand Greens</strong>.</p>
-        </div></div>
       </div>
     </div>
   </section>
@@ -849,14 +822,6 @@ $$('#nav a').forEach(a=>a.addEventListener('click',()=>{
   document.body.style.overflow='';
 }));
 
-/* ---------------- event cards ---------------- */
-$$('.ev').forEach(card=>{
-  const btn = $('.ev-toggle', card);
-  card.addEventListener('click', ()=>{
-    const on = card.classList.toggle('open');
-    btn.setAttribute('aria-expanded', String(on));
-  });
-});
 
 /* ---------------- arch outline draw length ---------------- */
 (function(){
