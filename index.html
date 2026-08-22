@@ -90,66 +90,90 @@ p.lede{
 .orn-rule svg{width:21px;height:21px;color:var(--gold);flex:none}
 .stem{width:1px;height:56px;background:linear-gradient(var(--rule),transparent);margin:32px auto}
 
-/* ============================ COVER / ENVELOPE ============================ */
+/* ============================ COVER ============================ */
 #cover{
   position:fixed;inset:0;z-index:90;
   display:flex;align-items:center;justify-content:center;
   background:var(--ground);
-  transition:opacity .8s var(--ease),visibility .8s;
+  transition:opacity 1s ease .12s,visibility 1s;
 }
-#cover.open{opacity:0;visibility:hidden}
+#cover.open{opacity:0;visibility:hidden;pointer-events:none}
 .cov-inner{
   position:relative;width:100%;max-width:var(--card);height:100%;
-  background:var(--paper);overflow:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:0;padding:40px 30px;text-align:center;
+  background:
+    radial-gradient(122% 68% at 50% 6%,rgba(223,163,40,.12),transparent 58%),
+    radial-gradient(112% 58% at 50% 100%,rgba(192,95,109,.10),transparent 60%),
+    var(--paper);
+  overflow:hidden;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  padding:36px 26px;text-align:center;
+  transition:transform 1s cubic-bezier(.34,.06,.24,1),opacity .9s ease;
 }
+#cover.open .cov-inner{transform:scale(1.18);opacity:0}
 .cov-inner::before{
   content:"";position:absolute;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%236E8049' stroke-width='.7' opacity='.18'%3E%3Crect x='9' y='9' width='26' height='26'/%3E%3Crect x='9' y='9' width='26' height='26' transform='rotate(45 22 22)'/%3E%3C/g%3E%3C/svg%3E");
+  opacity:.55;
 }
-/* the two leaves that part on open */
-.leaf{
-  position:absolute;top:0;bottom:0;width:50%;z-index:3;
-  background:var(--paper-2);
-  transition:transform 1.15s var(--ease);
-  box-shadow:0 0 40px rgba(38,48,31,.18);
+.cov-inner::after{
+  content:"";position:absolute;inset:15px;pointer-events:none;
+  border:1px solid rgba(168,135,70,.28);
 }
-.leaf.l{left:0;transform-origin:left center;border-right:1px solid var(--rule)}
-.leaf.r{right:0;transform-origin:right center;border-left:1px solid var(--rule)}
-#cover.open .leaf.l{transform:translateX(-101%)}
-#cover.open .leaf.r{transform:translateX(101%)}
-.leaf::after{
-  content:"";position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23A88746' stroke-width='.7' opacity='.22'%3E%3Crect x='9' y='9' width='26' height='26'/%3E%3Crect x='9' y='9' width='26' height='26' transform='rotate(45 22 22)'/%3E%3C/g%3E%3C/svg%3E");
+@keyframes covRise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes covBloom{from{opacity:0;transform:scale(.68)}to{opacity:1;transform:scale(1)}}
+@keyframes covGrow{from{opacity:0;transform:translateX(-50%) scale(.72)}to{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes covFade{to{opacity:.58}}
+@keyframes covHalo{
+  0%,100%{box-shadow:0 10px 26px -12px rgba(38,48,31,.4),0 0 0 1px rgba(168,135,70,.26),0 0 0 0 rgba(192,95,109,.24)}
+  65%{box-shadow:0 10px 26px -12px rgba(38,48,31,.4),0 0 0 1px rgba(168,135,70,.26),0 0 0 18px rgba(192,95,109,0)}
 }
-.cov-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;gap:0}
-.cov-bism{font-size:19px;color:var(--mehndi-deep);opacity:.9;margin-bottom:30px;font-family:serif;direction:rtl}
-.cov-names{display:flex;flex-direction:column;align-items:center;margin:0;color:var(--ink)}
-.cov-amp{font-family:'Italianno',cursive;font-size:58px;color:var(--gulab);line-height:.75;margin-bottom:2px}
-.cov-pair{
-  display:flex;align-items:baseline;justify-content:center;
-  gap:clamp(24px,6.8vw,38px);
-  font-family:'Marcellus',serif;font-size:clamp(28px,8.4vw,40px);line-height:1.15;
+
+/* floral garland arching over the card */
+.cov-garland{
+  position:absolute;top:3.5%;left:50%;width:min(330px,88%);
+  transform:translateX(-50%);
+  animation:covGrow 1.25s var(--ease) both .05s;
 }
-.cov-date{margin-top:24px;color:var(--gold);}
-/* wax seal */
-.seal{
-  margin-top:44px;width:104px;height:104px;border-radius:50%;position:relative;
-  display:grid;place-items:center;
-  background:radial-gradient(circle at 34% 28%,#D9B96E,#A88746 46%,#7E6330 100%);
-  box-shadow:0 10px 26px -8px rgba(38,48,31,.6),inset 0 0 0 1px rgba(255,255,255,.22);
-  transition:transform .5s var(--ease),box-shadow .5s var(--ease);
-  animation:sealPulse 3.4s ease-in-out infinite;
+.cov-corner{position:absolute;bottom:-3%;width:118px;opacity:0;animation:covFade 1.4s var(--ease) both .4s}
+.cov-corner.l{left:-28px;transform:rotate(7deg)}
+.cov-corner.r{right:-4px;transform:scaleX(-1) rotate(7deg)}
+
+.cov-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center}
+.cov-bism{
+  font-size:20px;color:var(--mehndi-deep);opacity:.9;margin:0 0 24px;
+  font-family:serif;direction:rtl;animation:covRise .9s var(--ease) both .22s;
 }
-.seal:hover{transform:scale(1.06)}
-.seal:active{transform:scale(.97)}
-.seal span{font-family:'Marcellus',serif;font-size:23px;color:#FBF5E9;letter-spacing:.04em;text-shadow:0 1px 2px rgba(0,0,0,.3)}
-.seal::after{content:"";position:absolute;inset:9px;border-radius:50%;border:1px dashed rgba(251,245,233,.5)}
-@keyframes sealPulse{0%,100%{box-shadow:0 10px 26px -8px rgba(38,48,31,.6),inset 0 0 0 1px rgba(255,255,255,.22),0 0 0 0 rgba(168,135,70,.42)}
-  70%{box-shadow:0 10px 26px -8px rgba(38,48,31,.6),inset 0 0 0 1px rgba(255,255,255,.22),0 0 0 20px rgba(168,135,70,0)}}
-.cov-hint{margin-top:20px;color:var(--ink-faint)}
-#cover.open .cov-content{opacity:0;transition:opacity .35s}
+.cov-eyebrow{color:var(--gold);margin-bottom:14px;animation:covRise .9s var(--ease) both .45s}
+.cov-names{margin:0;font-family:'Marcellus',serif;color:var(--ink);line-height:1.08}
+.cov-names .cn{display:block;font-size:clamp(34px,10.5vw,50px)}
+.cov-names .cn:first-of-type{animation:covRise .95s var(--ease) both .6s}
+.cov-names .cn:last-of-type{animation:covRise .95s var(--ease) both .8s}
+.cov-amp{
+  display:block;font-family:'Italianno',cursive;font-size:54px;
+  color:var(--gulab);line-height:.72;margin:6px 0;
+  animation:covBloom .85s var(--ease) both .72s;
+}
+.cov-rule{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  width:196px;margin:26px auto 0;animation:covRise .9s var(--ease) both .98s;
+}
+.cov-rule i{flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rule),transparent)}
+.cov-rule svg{width:19px;height:19px;flex:none}
+.cov-date{margin-top:16px;color:var(--gold);animation:covRise .9s var(--ease) both 1.08s}
+
+/* floral rosette — replaces the wax seal */
+.cov-open{
+  margin-top:38px;width:112px;height:112px;border-radius:50%;
+  display:grid;place-items:center;position:relative;
+  background:radial-gradient(circle at 50% 42%,#FEFAF0,#F7EDD8 68%,#F1E2C6 100%);
+  box-shadow:0 10px 26px -12px rgba(38,48,31,.4),0 0 0 1px rgba(168,135,70,.26);
+  animation:covBloom 1s var(--ease) both 1.2s,covHalo 3.4s ease-in-out infinite 2.2s;
+  transition:box-shadow .45s var(--ease);
+}
+.cov-open:hover{box-shadow:0 12px 32px -12px rgba(38,48,31,.5),0 0 0 1px rgba(168,135,70,.55),0 0 0 14px rgba(192,95,109,.07)}
+.cov-open .rosette{width:100%;height:100%;display:block}
+.cov-open .ring{transform-box:fill-box;transform-origin:50% 50%;animation:spin 46s linear infinite}
+.cov-hint{margin-top:18px;color:var(--ink-faint);animation:covRise .9s var(--ease) both 1.45s}
 
 /* ============================ STICKY RAIL ============================ */
 #rail{
@@ -239,18 +263,14 @@ p.lede{
 .arch-wrap.in .spray.l{opacity:1;transform:translateX(0) rotate(-6deg)}
 .arch-wrap.in .spray.r{opacity:1;transform:translateX(0) scaleX(-1) rotate(6deg)}
 
-.names{margin:40px 0 0;display:flex;flex-direction:column;align-items:center}
-.names .amp{
-  font-family:'Italianno',cursive;
-  font-size:62px;line-height:.75;color:var(--gulab);margin-bottom:2px;
-}
-.names .pair{
-  display:flex;align-items:baseline;justify-content:center;
-  gap:clamp(26px,7.2vw,42px);
-}
+.names{margin:40px 0 0}
 .names .n{
-  font-family:'Marcellus',serif;
-  font-size:clamp(30px,8.8vw,42px);line-height:1.12;color:var(--ink);
+  display:block;font-family:'Marcellus',serif;
+  font-size:clamp(32px,9.5vw,44px);line-height:1.1;color:var(--ink);
+}
+.names .amp{
+  display:block;font-family:'Italianno',cursive;
+  font-size:54px;line-height:.78;color:var(--gulab);margin:4px 0;
 }
 .hero-date{
   margin-top:30px;display:flex;align-items:center;justify-content:center;gap:14px;
@@ -512,15 +532,31 @@ p.lede{
 
 <!-- ===================== COVER ===================== -->
 <div id="cover">
-  <div class="cov-inner">
-    <div class="leaf l"></div>
-    <div class="leaf r"></div>
+  <div class="cov-inner" id="covInner">
+    <svg class="cov-garland" viewBox="0 0 300 100" aria-hidden="true"><path d="M8,86 Q150,2 292,86" fill="none" stroke="#7E8F57" stroke-width="1.6" opacity=".55" stroke-linecap="round"/><g fill="#7E8F57" opacity=".5"><use href="#pLeaf" transform="translate(39.2,75.6) rotate(-40) scale(.5)"/><use href="#pLeaf" transform="translate(64.8,65.1) rotate(-40) scale(.5)"/><use href="#pLeaf" transform="translate(93.2,56.7) rotate(-40) scale(.5)"/><use href="#pLeaf" transform="translate(206.8,56.7) rotate(40) scale(.5)"/><use href="#pLeaf" transform="translate(235.2,65.1) rotate(40) scale(.5)"/><use href="#pLeaf" transform="translate(260.8,75.6) rotate(40) scale(.5)"/></g><use href="#s-mogra" x="18.0" y="69.5" width="14" height="14"/><use href="#s-rose" x="39.6" y="53.6" width="22" height="22"/><use href="#s-marigold" x="69.5" y="45.0" width="19" height="19"/><use href="#s-mogra" x="100.9" y="41.3" width="13" height="13"/><use href="#s-rose" x="121.0" y="32.6" width="24" height="24"/><use href="#s-marigold" x="137.0" y="31.0" width="26" height="26"/><use href="#s-rose" x="155.0" y="32.6" width="24" height="24"/><use href="#s-mogra" x="186.1" y="41.3" width="13" height="13"/><use href="#s-marigold" x="211.5" y="45.0" width="19" height="19"/><use href="#s-rose" x="238.4" y="53.6" width="22" height="22"/><use href="#s-mogra" x="268.0" y="69.5" width="14" height="14"/></svg>
+    <svg class="cov-corner l" viewBox="0 0 130 270" aria-hidden="true"><use href="#s-spray"/></svg>
+    <svg class="cov-corner r" viewBox="0 0 130 270" aria-hidden="true"><use href="#s-spray"/></svg>
     <div class="cov-content">
-      <p class="cov-bism">بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-      <div class="cov-names"><span class="cov-amp">&amp;</span><span class="cov-pair"><span>Arif</span><span>Hafsa</span></span></div>
-      <p class="cov-date util">Saturday · 10 October 2026</p>
-      <button class="seal" id="seal" aria-label="Open the invitation"><span>A&amp;H</span></button>
-      <p class="cov-hint util">Tap the seal to open</p>
+      <p class="cov-bism">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1648;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1648;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1618;&#1605;&#1616;</p>
+      <span class="cov-eyebrow util">The wedding of</span>
+      <p class="cov-names">
+        <span class="cn">Hafsa</span>
+        <span class="cov-amp">&amp;</span>
+        <span class="cn">Arif</span>
+      </p>
+      <div class="cov-rule"><i></i><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#s-mogra"/></svg><i></i></div>
+      <p class="cov-date util">Saturday &#183; 10 October 2026</p>
+      <button class="cov-open" id="seal" aria-label="Open the invitation">
+        <svg class="rosette" viewBox="0 0 120 120" aria-hidden="true">
+          <g class="ring" fill="none" stroke="var(--gold)" stroke-width="1.1" opacity=".75">
+            <circle cx="60" cy="60" r="54" stroke-dasharray="2 4.5"/>
+            <rect x="27" y="27" width="66" height="66"/>
+            <rect x="27" y="27" width="66" height="66" transform="rotate(45 60 60)"/>
+          </g>
+          <use href="#s-marigold" x="37" y="37" width="46" height="46"/>
+        </svg>
+      </button>
+      <p class="cov-hint util">Tap to open</p>
     </div>
   </div>
 </div>
@@ -593,8 +629,9 @@ p.lede{
 
     <p class="util eyebrow rv rv-d2" style="margin:44px 0 14px">We are getting married</p>
     <h1 class="names rv rv-d3">
+      <span class="n">Hafsa</span>
       <span class="amp">&amp;</span>
-      <span class="pair"><span class="n">Arif</span><span class="n">Hafsa</span></span>
+      <span class="n">Arif</span>
     </h1>
     <div class="hero-date util rv rv-d4"><i></i>10 · 10 · 2026<i></i></div>
     <p class="hero-day rv rv-d4">Saturday</p>
@@ -749,11 +786,20 @@ const cover = $('#cover');
 document.body.style.overflow = 'hidden';
 function openInvite(){
   if(cover.classList.contains('open')) return;
+  const btn = $('#seal'), pc = $('#petals');
+  if(window.__petalBurst && pc && btn){
+    const r = btn.getBoundingClientRect();
+    pc.style.zIndex = '95';                       // burst reads over the cover
+    window.__petalBurst(
+      r.left + r.width/2 - (innerWidth - pc.clientWidth)/2,
+      r.top + r.height/2, 54);
+    setTimeout(()=>{ pc.style.zIndex = ''; }, 2400);
+  }
   cover.classList.add('open');
   document.body.style.overflow = '';
-  setTimeout(()=>{ cover.remove(); reveal(); }, RM ? 50 : 1250);
+  setTimeout(()=>{ cover.remove(); reveal(); }, RM ? 50 : 1150);
 }
-$('#seal').addEventListener('click', openInvite);
+$('#covInner').addEventListener('click', openInvite);
 
 /* ---------------- countdown ---------------- */
 const target = new Date(CONFIG.reception).getTime();
@@ -875,25 +921,45 @@ function reveal(){
       col: TINT[(Math.random()*TINT.length)|0]
     };
   }
-  function draw(t){
+  function petal(p, x, y, alpha){
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(p.rot);
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = p.col;
+    ctx.beginPath();
+    ctx.moveTo(0, -p.r);
+    ctx.bezierCurveTo( p.r*.78, -p.r*.45,  p.r*.72, p.r*.55, 0, p.r);
+    ctx.bezierCurveTo(-p.r*.72,  p.r*.55, -p.r*.78,-p.r*.45, 0,-p.r);
+    ctx.fill();
+    ctx.restore();
+  }
+  // petals thrown outward from a point — used when the invitation opens
+  window.__petalBurst = function(cx, cy, n){
+    for(let i=0;i<n;i++){
+      const ang = Math.random()*Math.PI*2, sp = 2.2 + Math.random()*7;
+      P.push({
+        burst:true, life:1, x:cx, y:cy,
+        vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp - 1.6,
+        r:4 + Math.random()*6, rot:Math.random()*6.283, vr:(Math.random()-.5)*.3,
+        a:.55 + Math.random()*.4, col:TINT[(Math.random()*TINT.length)|0]
+      });
+    }
+  };
+  function draw(){
     ctx.clearRect(0,0,W,H);
-    for(const p of P){
-      p.y += p.vy;
-      p.phase += .012;
-      p.rot += p.vr;
-      const x = p.x + Math.sin(p.phase)*p.sway*7;
-      if(p.y > H+24) Object.assign(p, spawn(false));
-      ctx.save();
-      ctx.translate(x, p.y);
-      ctx.rotate(p.rot);
-      ctx.globalAlpha = p.a;
-      ctx.fillStyle = p.col;
-      ctx.beginPath();
-      ctx.moveTo(0, -p.r);
-      ctx.bezierCurveTo( p.r*.78, -p.r*.45,  p.r*.72, p.r*.55, 0, p.r);
-      ctx.bezierCurveTo(-p.r*.72,  p.r*.55, -p.r*.78,-p.r*.45, 0,-p.r);
-      ctx.fill();
-      ctx.restore();
+    for(let i=P.length-1;i>=0;i--){
+      const p = P[i];
+      if(p.burst){
+        p.x += p.vx; p.y += p.vy;
+        p.vy += .13; p.vx *= .984; p.rot += p.vr; p.life -= .0115;
+        if(p.life <= 0 || p.y > H+40){ P.splice(i,1); continue; }
+        petal(p, p.x, p.y, p.a * Math.max(0, p.life));
+      } else {
+        p.y += p.vy; p.phase += .012; p.rot += p.vr;
+        if(p.y > H+24) Object.assign(p, spawn(false));
+        petal(p, p.x + Math.sin(p.phase)*p.sway*7, p.y, p.a);
+      }
     }
     requestAnimationFrame(draw);
   }
