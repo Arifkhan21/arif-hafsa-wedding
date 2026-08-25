@@ -1,9 +1,10 @@
+<meta charset="utf-8">
 <title>Hafsa &amp; Arif</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italianno&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italianno&family=Tangerine:wght@700&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
    HAFSA & ARIF — 9 October 2026
@@ -92,9 +93,11 @@ p.lede{
 
 /* ============================ COVER ============================ */
 #cover{
+  --p:0;                       /* 0 -> 1 : how far the card has been pulled open */
   position:fixed;inset:0;z-index:90;
   display:flex;align-items:center;justify-content:center;
   background:var(--ground);
+  touch-action:none;           /* we interpret the drag ourselves */
   transition:opacity 1s ease .12s,visibility 1s;
 }
 #cover.open{opacity:0;visibility:hidden;pointer-events:none}
@@ -107,9 +110,19 @@ p.lede{
   overflow:hidden;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   padding:36px 26px;text-align:center;
+  transform:scale(calc(1 + .14 * var(--p)));
+  transition:transform .62s cubic-bezier(.22,1.35,.44,1),opacity .62s ease;
+}
+/* while a finger or wheel is driving it, track the gesture with no easing */
+#cover.pulling .cov-inner,
+#cover.pulling .cov-content,
+#cover.pulling .cov-cue,
+#cover.pulling .pull-arc{transition:none}
+/* the real opening — unchanged, and shared by tap and pull alike */
+#cover.open .cov-inner{
+  transform:scale(1.18);opacity:0;
   transition:transform 1s cubic-bezier(.34,.06,.24,1),opacity .9s ease;
 }
-#cover.open .cov-inner{transform:scale(1.18);opacity:0}
 .cov-inner::before{
   content:"";position:absolute;inset:0;
   background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2764%27%20height%3D%2764%27%20viewBox%3D%270%200%2064%2064%27%3E%3Cg%20fill%3D%27%236E8049%27%20stroke%3D%27%236E8049%27%20stroke-width%3D%27.6%27%20opacity%3D%270.176%27%20stroke-linejoin%3D%27round%27%20stroke-linecap%3D%27round%27%3E%3Cg%20transform%3D%27translate%289%2C6%29%20rotate%288%29%27%3E%3Cpath%20fill%3D%27none%27%20d%3D%27M0%2C0%20C4%2C7%20-1%2C14%203%2C22%27%2F%3E%3Cg%20transform%3D%27translate%281.6%2C5%29%20rotate%28-28%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%280.9%2C12%29%20rotate%28190%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%282.6%2C19%29%20rotate%28-22%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%2841%2C38%29%20rotate%28-12%29%27%3E%3Cpath%20fill%3D%27none%27%20d%3D%27M0%2C0%20C4%2C7%20-1%2C14%203%2C22%27%2F%3E%3Cg%20transform%3D%27translate%281.6%2C5%29%20rotate%28-28%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%280.9%2C12%29%20rotate%28190%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3Cg%20transform%3D%27translate%282.6%2C19%29%20rotate%28-22%29%27%3E%3Cpath%20d%3D%27M0.00%2C0.00%20Q4.00%2C3.80%208.00%2C0.00%20Q4.00%2C-3.80%200.00%2C0.00%20Z%27%2F%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E");
@@ -138,7 +151,11 @@ p.lede{
 .cov-corner.l{left:-28px;transform:rotate(7deg)}
 .cov-corner.r{right:-4px;transform:scaleX(-1) rotate(7deg)}
 
-.cov-content{position:relative;z-index:4;display:flex;flex-direction:column;align-items:center}
+.cov-content{
+  position:relative;z-index:4;display:flex;flex-direction:column;align-items:center;
+  transform:translateY(calc(-12px * var(--p)));
+  transition:transform .62s cubic-bezier(.22,1.35,.44,1);
+}
 .cov-bism{
   font-size:20px;color:var(--mehndi-deep);opacity:.9;margin:0 0 24px;
   font-family:serif;direction:rtl;animation:covRise .9s var(--ease) both .22s;
@@ -149,11 +166,11 @@ p.lede{
   display:flex;align-items:baseline;justify-content:center;
   gap:clamp(10px,3.4vw,20px);
 }
-.cov-names .cn{font-family:'Italianno',cursive;font-size:clamp(50px,15.5vw,74px);line-height:1.15}
+.cov-names .cn{font-family:'Tangerine',cursive;font-weight:700;font-size:clamp(59px,18.3vw,87px);line-height:1.15}
 .cov-names .cn:first-of-type{animation:covRise .95s var(--ease) both .6s}
 .cov-names .cn:last-of-type{animation:covRise .95s var(--ease) both .8s}
 .cov-amp{
-  font-family:'Italianno',cursive;font-size:clamp(34px,10vw,48px);
+  font-family:'Tangerine',cursive;font-weight:700;font-size:clamp(40px,11.8vw,57px);
   color:var(--gulab);line-height:1;
   animation:covBloom .85s var(--ease) both .72s;
 }
@@ -178,6 +195,23 @@ p.lede{
 .cov-open .rosette{width:100%;height:100%;display:block}
 .cov-open .ring{transform-box:fill-box;transform-origin:50% 50%;animation:spin 46s linear infinite}
 .cov-hint{margin-top:18px;color:var(--ink-faint);animation:covRise .9s var(--ease) both 1.45s}
+/* the cue fades out as the card is pulled — it sits on its own wrapper because a
+   running animation (covRise) would otherwise win over a plain opacity value */
+.cov-cue{
+  display:flex;flex-direction:column;align-items:center;
+  opacity:calc(1 - var(--p));transition:opacity .62s ease;
+}
+.cov-chev{
+  margin-top:9px;width:17px;height:17px;color:var(--ink-faint);opacity:.5;
+  animation:covRise .9s var(--ease) both 1.6s,covBob 2.6s ease-in-out infinite 2.7s;
+}
+@keyframes covBob{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+/* gold ring fills as you pull, so the gesture shows its own progress */
+.pull-arc{
+  stroke-dashoffset:calc(345.58 - 345.58 * var(--p));
+  opacity:calc(.25 + .75 * var(--p));
+  transition:stroke-dashoffset .62s cubic-bezier(.22,1.35,.44,1),opacity .62s ease;
+}
 
 /* ============================ STICKY RAIL ============================ */
 #rail{
@@ -290,12 +324,12 @@ p.lede{
   gap:clamp(10px,3.2vw,20px);
 }
 .names .n{
-  font-family:'Italianno',cursive;
-  font-size:clamp(48px,14.5vw,68px);line-height:1.15;color:var(--ink);
+  font-family:'Tangerine',cursive;font-weight:700;
+  font-size:clamp(57px,17.1vw,80px);line-height:1.15;color:var(--ink);
 }
 .names .amp{
-  font-family:'Italianno',cursive;
-  font-size:clamp(32px,9.5vw,44px);line-height:1;color:var(--gulab);
+  font-family:'Tangerine',cursive;font-weight:700;
+  font-size:clamp(38px,11.2vw,52px);line-height:1;color:var(--gulab);
 }
 .hero-date{
   margin-top:30px;display:flex;align-items:center;justify-content:center;gap:14px;
@@ -582,12 +616,16 @@ p.lede{
       <button class="cov-open" id="seal" aria-label="Open the invitation">
         <svg class="rosette" viewBox="0 0 120 120" aria-hidden="true">
           <circle cx="60" cy="60" r="55" fill="none" stroke="var(--gold)" stroke-width=".9" opacity=".38"/>
+          <circle class="pull-arc" cx="60" cy="60" r="55" fill="none" stroke="var(--gulab)" stroke-width="2" stroke-linecap="round" transform="rotate(-90 60 60)" stroke-dasharray="345.58"/>
           <circle cx="60" cy="60" r="50" fill="none" stroke="var(--gold)" stroke-width=".75" opacity=".24"/>
           <g class="ring" fill="#7E8F57" opacity=".5"><use href="#pLeaf" transform="translate(110.0,60.0) rotate(20) scale(.5)"/><use href="#pLeaf" transform="translate(100.5,89.4) rotate(56) scale(.5)"/><use href="#pLeaf" transform="translate(75.5,107.6) rotate(92) scale(.5)"/><use href="#pLeaf" transform="translate(44.5,107.6) rotate(128) scale(.5)"/><use href="#pLeaf" transform="translate(19.5,89.4) rotate(164) scale(.5)"/><use href="#pLeaf" transform="translate(10.0,60.0) rotate(200) scale(.5)"/><use href="#pLeaf" transform="translate(19.5,30.6) rotate(236) scale(.5)"/><use href="#pLeaf" transform="translate(44.5,12.4) rotate(272) scale(.5)"/><use href="#pLeaf" transform="translate(75.5,12.4) rotate(308) scale(.5)"/><use href="#pLeaf" transform="translate(100.5,30.6) rotate(344) scale(.5)"/></g>
           <use href="#s-marigold" x="38" y="38" width="44" height="44"/>
         </svg>
       </button>
-      <p class="cov-hint util">Tap to open</p>
+      <div class="cov-cue">
+        <p class="cov-hint util">Tap or scroll to open</p>
+        <svg class="cov-chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
     </div>
   </div>
 </div>
@@ -710,7 +748,7 @@ p.lede{
       <div class="fam-side">
         <p class="fn">Arif Khan</p>
         <p><span>Son of</span><b>Raees Khan</b> <b><i>&amp;</i> Mubina Bano</b></p>
-        <p style="margin-top:8px"><span>Grandson of</span>Late Shammi Khan</p>
+        <p style="margin-top:8px"><span>Grandson of</span>Late Sammi Khan</p>
       </div>
     </div>
   </section>
@@ -829,6 +867,67 @@ function openInvite(){
   setTimeout(()=>{ cover.remove(); reveal(); }, RM ? 50 : 1150);
 }
 $('#covInner').addEventListener('click', openInvite);
+
+/* -------- pull / scroll to open --------
+   A deliberate scroll or drag opens the card; a slight one previews the
+   opening and springs back. Crossing the threshold hands straight to
+   openInvite(), so both routes play exactly the same animation.        */
+(function(){
+  const TOUCH = 110;          // px of finger travel to commit
+  const WHEEL = 260;          // accumulated wheel delta to commit
+  let pull = 0, unit = WHEEL, dragging = false, startY = 0, idle = 0;
+  const done = () => cover.classList.contains('open');
+
+  function setP(v){
+    pull = Math.max(0, v);
+    const p = Math.min(pull / unit, 1);
+    cover.style.setProperty('--p', p.toFixed(4));
+    return p;
+  }
+  function release(){
+    clearTimeout(idle);
+    cover.classList.remove('pulling');
+    if(pull >= unit) openInvite();   // same path as the tap
+    else setP(0);                    // springs back
+  }
+
+  cover.addEventListener('wheel', e => {
+    if(done()) return;
+    // normalise line- and page-mode wheels to pixels
+    const dy = e.deltaMode === 1 ? e.deltaY * 16
+             : e.deltaMode === 2 ? e.deltaY * 400
+             : e.deltaY;
+    if(unit !== WHEEL){ unit = WHEEL; pull = 0; }
+    cover.classList.add('pulling');
+    if(setP(pull + dy) >= 1) return release();
+    clearTimeout(idle);
+    idle = setTimeout(release, 260);
+  }, {passive:true});
+
+  cover.addEventListener('touchstart', e => {
+    if(done()) return;
+    dragging = true; unit = TOUCH; pull = 0;
+    startY = e.touches[0].clientY;
+    cover.classList.add('pulling');
+  }, {passive:true});
+
+  cover.addEventListener('touchmove', e => {
+    if(!dragging || done()) return;
+    if(setP(startY - e.touches[0].clientY) >= 1){ dragging = false; release(); }
+  }, {passive:true});
+
+  ['touchend','touchcancel'].forEach(ev =>
+    cover.addEventListener(ev, () => {
+      if(!dragging) return;
+      dragging = false; release();
+    }, {passive:true}));
+
+  // keyboard equivalent of a scroll, for anyone who never sees the seal
+  addEventListener('keydown', e => {
+    if(done()) return;
+    if(e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') openInvite();
+  });
+})();
 
 /* ---------------- countdown ---------------- */
 const target = new Date(CONFIG.nikah).getTime();
