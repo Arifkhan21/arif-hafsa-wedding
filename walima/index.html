@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Italianno&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   ARIF & HAFSA — Reception, 10 October 2026
+   ARIF & HAFSA — Walima, 10 October 2026
    A letterpress invitation card. Deliberately single-theme:
    ivory paper + mehndi ink, painted explicitly so it holds
    on any host background.
@@ -386,7 +386,7 @@ p.lede{
 .ev-haldi{--hue:var(--haldi);--hue-deep:var(--haldi-deep)}
 .ev-mehndi{--hue:var(--mehndi);--hue-deep:var(--mehndi-deep)}
 .ev-nikah{--hue:var(--gold);--hue-deep:#7E6330}
-.ev-recep{--hue:var(--gulab);--hue-deep:#96414F}
+.ev-walima{--hue:var(--gulab);--hue-deep:#96414F}
 /* the ritual glyph sits in the dome */
 .ev-glyph{
   position:absolute;top:16px;left:50%;transform:translateX(-50%);
@@ -572,7 +572,7 @@ p.lede{
     <svg class="cov-corner r" viewBox="0 0 130 270" aria-hidden="true"><use href="#s-spray"/></svg>
     <div class="cov-content">
       <p class="cov-bism">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1648;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1648;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1618;&#1605;&#1616;</p>
-      <span class="cov-eyebrow util">The reception of</span>
+      <span class="cov-eyebrow util">The walima of</span>
       <p class="cov-names">
         <span class="cn">Arif</span>
         <span class="cov-amp">&amp;</span>
@@ -651,7 +651,7 @@ p.lede{
       </svg>
     </div>
 
-    <p class="util eyebrow rv rv-d2" style="margin:44px 0 14px">Please join us for our reception</p>
+    <p class="util eyebrow rv rv-d2" style="margin:44px 0 14px">Please join us for our walima</p>
     <h1 class="names rv rv-d3">
       <span class="n">Arif</span>
       <span class="amp">&amp;</span>
@@ -725,10 +725,10 @@ p.lede{
         <span class="ev-dow">Friday</span>
       </div>
 
-      <div class="ev ev-recep rv rv-d1">
+      <div class="ev ev-walima rv rv-d1">
         <svg class="ev-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><g><ellipse cx="24" cy="14" rx="6" ry="8.5"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(72 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(144 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(216 24 24)"/><ellipse cx="24" cy="14" rx="6" ry="8.5" transform="rotate(288 24 24)"/></g><circle cx="24" cy="24" r="3.4"/></svg>
         <span class="ev-num"></span>
-        <h3 class="ev-name">Reception</h3>
+        <h3 class="ev-name">Walima</h3>
         <span class="ev-when util">10 October 2026</span>
         <span class="ev-dow">Saturday</span>
       </div>
@@ -737,7 +737,7 @@ p.lede{
 
   <!-- ===================== VENUE ===================== -->
   <section id="venue">
-    <span class="util eyebrow gold rv">The Reception</span>
+    <span class="util eyebrow gold rv">The Walima Ceremony</span>
     <div class="orn-rule rv" style="margin-top:0"><i></i><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#s-rose"/></svg><i></i></div>
     <h2 class="venue-name rv rv-d1">Bundelkhand Greens</h2>
     <p class="venue-sub rv rv-d1">Jhansi &middot; Saturday, 10 October 2026</p>
@@ -777,7 +777,7 @@ p.lede{
    EDIT THESE — everything else follows from here.
    ============================================================ */
 const CONFIG = {
-  reception: '2026-10-10T19:00:00+05:30',  // date & time of the reception (IST)
+  walima: '2026-10-10T19:00:00+05:30',  // date & time of the walima (IST)
   durationHrs: 3.5,
   venue:       'Bundelkhand Greens, Jhansi',
   mapUrl:      'https://maps.app.goo.gl/WK9JTcDZ5fNnnAs26',
@@ -810,7 +810,7 @@ function openInvite(){
 $('#covInner').addEventListener('click', openInvite);
 
 /* ---------------- countdown ---------------- */
-const target = new Date(CONFIG.reception).getTime();
+const target = new Date(CONFIG.walima).getTime();
 const pad = n => String(n).padStart(2,'0');
 const cdD=$('#cd-d'), cdH=$('#cd-h'), cdM=$('#cd-m'), cdS=$('#cd-s');
 const rD=$('#rd'), rH=$('#rh'), rM=$('#rm');
@@ -833,11 +833,11 @@ tick(); setInterval(tick,1000);
 /* ---------------- add to calendar ---------------- */
 (function(){
   const z = d => d.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
-  const start = new Date(CONFIG.reception);
+  const start = new Date(CONFIG.walima);
   const end   = new Date(start.getTime() + CONFIG.durationHrs*3600*1000);
   const u = new URL('https://calendar.google.com/calendar/render');
   u.searchParams.set('action','TEMPLATE');
-  u.searchParams.set('text','Arif & Hafsa — Wedding Reception');
+  u.searchParams.set('text','Arif & Hafsa — Walima');
   u.searchParams.set('dates', z(start)+'/'+z(end));
   u.searchParams.set('location', CONFIG.venue);
   u.searchParams.set('details','With love, Arif & Hafsa.\n'+CONFIG.mapUrl);
@@ -847,7 +847,7 @@ tick(); setInterval(tick,1000);
 /* ---------------- rsvp ---------------- */
 (function(){
   const box = $('#rsvpBox');
-  const msg = 'Assalamu alaikum! Thank you for the invitation — I would love to attend the reception of Arif & Hafsa.';
+  const msg = 'Assalamu alaikum! Thank you for the invitation — I would love to attend the walima of Arif & Hafsa.';
   if(CONFIG.rsvpWhatsApp){
     box.innerHTML = '<a class="btn rose" target="_blank" rel="noopener" href="https://wa.me/'+CONFIG.rsvpWhatsApp+'?text='+encodeURIComponent(msg)+'">'+
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M20.5 11.6a8.4 8.4 0 0 1-12.4 7.4L3.5 20.5l1.6-4.5a8.4 8.4 0 1 1 15.4-4.4Z"/><path d="M8.8 9.1c.3 2.6 2.6 4.9 5.2 5.2.6.1 1.2-.4 1.2-1v-.6l-1.7-.6-.8.8a6.6 6.6 0 0 1-2.3-2.3l.8-.8-.6-1.7h-.6c-.6 0-1.1.5-1 1.2Z"/></svg>RSVP on WhatsApp</a>';
