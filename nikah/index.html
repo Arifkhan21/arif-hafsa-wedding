@@ -213,6 +213,35 @@ p.lede{
   transition:stroke-dashoffset .62s cubic-bezier(.22,1.35,.44,1),opacity .62s ease;
 }
 
+/* ============================ MUSIC ============================ */
+.mus{
+  position:fixed;z-index:58;
+  bottom:calc(18px + env(safe-area-inset-bottom,0px));
+  right:max(16px,calc((100vw - var(--card))/2 + 16px));
+  width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;padding:0;
+  color:var(--gold);border:1px solid var(--rule);
+  /* frosted, so it stays legible on short screens where the hero
+     names reach the bottom of the first view */
+  background:rgba(251,245,233,.86);
+  -webkit-backdrop-filter:blur(9px);backdrop-filter:blur(9px);
+  box-shadow:0 8px 22px -10px rgba(38,48,31,.45);
+  opacity:0;visibility:hidden;transform:scale(.82);
+  transition:opacity .5s var(--ease),transform .5s var(--ease),visibility .5s,box-shadow .3s;
+}
+.mus.show{opacity:1;visibility:visible;transform:none}
+.mus:hover{box-shadow:0 10px 26px -10px rgba(38,48,31,.45),0 0 0 6px rgba(192,95,109,.26)}
+.mus:focus-visible{outline:2px solid var(--gulab);outline-offset:3px}
+.mus svg{width:19px;height:19px;display:block}
+.mus[aria-pressed="true"] .mus-mute{display:none}
+.mus[aria-pressed="false"] .mus-wave{display:none}
+/* pulses only when autoplay was refused, to invite the tap that starts it */
+.mus.idle{animation:musPulse 2.8s ease-in-out infinite 1s}
+@keyframes musPulse{
+  0%,100%{box-shadow:0 8px 22px -10px rgba(38,48,31,.45),0 0 0 0 rgba(192,95,109,.26)}
+  70%{box-shadow:0 8px 22px -10px rgba(38,48,31,.45),0 0 0 13px rgba(0,0,0,0)}
+}
+
 /* ============================ STICKY RAIL ============================ */
 #rail{
   position:fixed;top:0;left:50%;transform:translate(-50%,-100%);
@@ -630,6 +659,16 @@ p.lede{
   </div>
 </div>
 
+<!-- ===================== MUSIC ===================== -->
+<audio id="music" src="../music.mp3" loop preload="none"></audio>
+<button id="musicBtn" class="mus" type="button" aria-pressed="false" aria-label="Turn music on">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M4.6 9.6h3L11.9 6v12L7.6 14.4h-3z" fill="currentColor" stroke-width="1.1"/>
+    <g class="mus-wave"><path d="M15.1 9.4a3.7 3.7 0 0 1 0 5.2"/><path d="M17.7 7.1a7.2 7.2 0 0 1 0 9.8"/></g>
+    <g class="mus-mute"><path d="M15.6 10l4.3 4"/><path d="M19.9 10l-4.3 4"/></g>
+  </svg>
+</button>
+
 <!-- ===================== STICKY RAIL ===================== -->
 <div id="rail">
   <div class="rail-cd" aria-hidden="true">
@@ -741,7 +780,7 @@ p.lede{
     <div class="fam rv rv-d3" style="margin-top:38px">
       <div class="fam-side">
         <p class="fn">Hafsa Mariyam</p>
-        <p><span>Daughter of</span><b>Syed Asif Iftikhar</b> <b><i>&amp;</i> Naaz Asif</b></p>
+        <p><span>Daughter of</span><b>Syed Mohammad Asif Iftikhar</b> <b><i>&amp;</i> Naaz Asif</b></p>
         <p style="margin-top:8px"><span>Granddaughter of</span>Late Syed Iftikhar</p>
       </div>
       <div class="fam-amp">&amp;</div>
@@ -848,6 +887,67 @@ const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $  = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
 
+/* ---------------- music ----------------
+   Starts when the invitation is opened, which is a real user gesture, so the
+   browser allows sound. If it still refuses, the button pulses to invite a tap. */
+const music = (function(){
+  const el = $('#music'), btn = $('#musicBtn');
+  const VOL = .55, KEY = 'ha-music';
+  let want = true, live = false, primed = false, fading = 0;
+  try{ want = localStorage.getItem(KEY) !== 'off'; }catch(e){}
+
+  function fade(to, ms, done){
+    clearInterval(fading);
+    const from = el.volume, steps = Math.max(1, Math.round(ms/40));
+    let i = 0;
+    fading = setInterval(()=>{
+      i++;
+      el.volume = Math.min(1, Math.max(0, from + (to-from)*i/steps));
+      if(i >= steps){ clearInterval(fading); if(done) done(); }
+    }, 40);
+  }
+  function paint(on){
+    btn.setAttribute('aria-pressed', String(on));
+    btn.setAttribute('aria-label', on ? 'Turn music off' : 'Turn music on');
+    if(on) btn.classList.remove('idle');
+  }
+  function play(){
+    live = true; el.volume = 0;
+    const p = el.play();
+    const ok = ()=>{ paint(true); fade(VOL, 1400); };
+    const no = ()=>{ live = false; paint(false); btn.classList.add('idle'); };
+    if(p && p.then) p.then(ok, no); else ok();
+  }
+  function stop(){
+    live = false; paint(false); btn.classList.remove('idle');
+    fade(0, 420, ()=>el.pause());
+  }
+  /* A wheel is not a user gesture, so scroll-to-open cannot start audio on its
+     own. Unlock the element silently on the first gesture of any kind instead. */
+  function prime(){
+    if(primed) return; primed = true;
+    el.volume = 0;
+    const p = el.play();
+    if(p && p.then) p.then(()=>{ if(!live) el.pause(); }, ()=>{ primed = false; });
+    else if(!live) el.pause();
+  }
+  ['pointerdown','keydown','click'].forEach(ev =>
+    addEventListener(ev, prime, {passive:true, capture:true}));
+
+  btn.addEventListener('click', ()=>{
+    want = btn.getAttribute('aria-pressed') !== 'true';
+    try{ localStorage.setItem(KEY, want ? 'on' : 'off'); }catch(e){}
+    if(want) play(); else stop();
+  });
+  // never play into a tab nobody is looking at
+  addEventListener('visibilitychange', ()=>{
+    if(document.hidden){ if(!el.paused) el.pause(); }
+    else if(live && el.paused){ const p = el.play(); if(p && p.catch) p.catch(()=>{}); }
+  });
+
+  return { begin(){ btn.classList.add('show'); if(want) play(); else paint(false); } };
+})();
+
 /* ---------------- envelope ---------------- */
 const cover = $('#cover');
 document.body.style.overflow = 'hidden';
@@ -863,6 +963,7 @@ function openInvite(){
     setTimeout(()=>{ pc.style.zIndex = ''; }, 2400);
   }
   cover.classList.add('open');
+  music.begin();
   document.body.style.overflow = '';
   setTimeout(()=>{ cover.remove(); reveal(); }, RM ? 50 : 1150);
 }
