@@ -448,7 +448,6 @@ p.lede{
 .ev-haldi{--hue:var(--haldi);--hue-deep:var(--haldi-deep)}
 .ev-mehndi{--hue:var(--mehndi);--hue-deep:var(--mehndi-deep)}
 .ev-nikah{--hue:var(--gold);--hue-deep:#7E6330}
-.ev-baraat{--hue:var(--gulab);--hue-deep:#96414F}
 /* the ritual glyph sits in the dome */
 .ev-glyph{
   position:absolute;top:16px;left:50%;transform:translateX(-50%);
@@ -804,7 +803,7 @@ p.lede{
         <span class="ev-num"></span>
         <h3 class="ev-name">Haldi</h3>
         <span class="ev-when util">7 October 2026</span>
-        <span class="ev-dow">Wednesday</span>
+        <span class="ev-dow">Wednesday &middot; 2:00 PM</span>
       </div>
 
       <div class="ev ev-mehndi rv rv-d1">
@@ -812,15 +811,7 @@ p.lede{
         <span class="ev-num"></span>
         <h3 class="ev-name">Mehndi</h3>
         <span class="ev-when util">8 October 2026</span>
-        <span class="ev-dow">Thursday</span>
-      </div>
-
-      <div class="ev ev-baraat rv rv-d1">
-        <svg class="ev-glyph" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24,3.5 L24,8"/><path d="M18.5,11.5 C18.5,9.4 21,8 24,8 C27,8 29.5,9.4 29.5,11.5"/><path d="M16.5,11.5 L31.5,11.5"/><path d="M18.5,12.5 C14.5,19 14.5,28.5 18.5,34.5 L29.5,34.5 C33.5,28.5 33.5,19 29.5,12.5"/><path d="M16,34.5 L32,34.5"/><path d="M24,36 L24,40"/><circle cx="24" cy="41.6" r="1.5"/><path d="M24,19 C26.6,21.4 26.6,25.4 24,27.8 C21.4,25.4 21.4,21.4 24,19 Z"/></svg>
-        <span class="ev-num"></span>
-        <h3 class="ev-name">Baraat</h3>
-        <span class="ev-when util">9 October 2026</span>
-        <span class="ev-dow">Friday</span>
+        <span class="ev-dow">Thursday &middot; 6:00 PM</span>
       </div>
 
       <div class="ev ev-nikah rv rv-d1">
@@ -828,17 +819,18 @@ p.lede{
         <span class="ev-num"></span>
         <h3 class="ev-name">Nikah</h3>
         <span class="ev-when util">9 October 2026</span>
-        <span class="ev-dow">Friday</span>
+        <span class="ev-dow">Friday &middot; 10:00 PM</span>
       </div>
     </div>
   </section>
 
   <!-- ===================== VENUE ===================== -->
   <section id="venue">
-    <span class="util eyebrow gold rv">Nikah &amp; Baraat</span>
+    <span class="util eyebrow gold rv">Nikah</span>
     <div class="orn-rule rv" style="margin-top:0"><i></i><svg viewBox="0 0 100 100" aria-hidden="true"><use href="#s-rose"/></svg><i></i></div>
     <h2 class="venue-name rv rv-d1">Atri Garden</h2>
     <p class="venue-sub rv rv-d1">Jhansi &middot; Friday, 9 October 2026</p>
+    <p class="venue-sub rv rv-d1" style="margin-top:6px">Dinner from 7 PM &middot; Nikah ceremony at 10 PM</p>
     <div class="btns rv rv-d2">
       <a class="btn gold" href="https://maps.app.goo.gl/GUg3qUg8CJEWcaH99" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
@@ -875,7 +867,7 @@ p.lede{
    EDIT THESE — everything else follows from here.
    ============================================================ */
 const CONFIG = {
-  nikah:   '2026-10-09T19:00:00+05:30',  // date & time of the nikah (IST)
+  nikah:   '2026-10-09T22:00:00+05:30',  // date & time of the nikah (IST)
   durationHrs: 3.5,
   venue:       'Atri Garden, Jhansi',
   mapUrl:      'https://maps.app.goo.gl/GUg3qUg8CJEWcaH99',
@@ -1058,10 +1050,10 @@ tick(); setInterval(tick,1000);
   const end   = new Date(start.getTime() + CONFIG.durationHrs*3600*1000);
   const u = new URL('https://calendar.google.com/calendar/render');
   u.searchParams.set('action','TEMPLATE');
-  u.searchParams.set('text','Hafsa & Arif — Nikah & Baraat');
+  u.searchParams.set('text','Hafsa & Arif — Nikah');
   u.searchParams.set('dates', z(start)+'/'+z(end));
   u.searchParams.set('location', CONFIG.venue);
-  u.searchParams.set('details','With love, Hafsa & Arif.\n'+CONFIG.mapUrl);
+  u.searchParams.set('details','Dinner from 7 PM. With love, Hafsa & Arif.\n'+CONFIG.mapUrl);
   $('#calBtn').href = u.toString();
 })();
 
